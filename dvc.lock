@@ -1,0 +1,18 @@
+schema: '2.0'
+stages:
+  data_cleaning:
+    cmd: python swiggy_delivery_time_prediction\data\data_cleaning.py
+    deps:
+    - path: data\raw\swiggy.csv
+      hash: md5
+      md5: 0b050b37dfe6cfbfaa18d7cb4e454377
+      size: 7772212
+    - path: swiggy_delivery_time_prediction\data\data_cleaning.py
+      hash: md5
+      md5: 37571c80c186508f98527b3997b03891
+      size: 19577
+    outs:
+    - path: data\cleaned\swiggy_cleaned.csv
+      hash: md5
+      md5: 8304a5741f050725d706378df2cf7126
+      size: 4498707
