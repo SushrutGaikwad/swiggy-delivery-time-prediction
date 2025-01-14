@@ -78,7 +78,7 @@ class DataPreprocessor:
             self.logger.error(f"[read_params] Error: {e}")
             raise
 
-    def load_data(self, path: Path) -> pd.DataFrame:
+    def load_data(self, data_path: Path) -> pd.DataFrame:
         """Loads the data from a given path.
 
         Args:
@@ -90,12 +90,12 @@ class DataPreprocessor:
         try:
             self.logger.info("Executing `load_data`...")
 
-            df = pd.read_csv(path)
+            df = pd.read_csv(data_path)
 
             self.logger.info("Execution of `load_data` complete.")
             return df
         except Exception as e:
-            self.logger.error(f"[load_data] Error reading data at {path}: {e}")
+            self.logger.error(f"[load_data] Error reading data at {data_path}: {e}")
             raise
 
     def drop_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
