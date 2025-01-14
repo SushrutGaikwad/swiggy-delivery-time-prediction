@@ -18,3 +18,14 @@ stages:
     outs:
     - data\interim\train.csv
     - data\interim\test.csv
+  
+  data_preprocessing:
+    cmd: python swiggy_delivery_time_prediction\features\data_preprocessing.py
+    deps:
+    - data\interim\train.csv
+    - data\interim\test.csv
+    - swiggy_delivery_time_prediction\features\data_preprocessing.py
+    outs:
+    - data\processed\transformed_train.csv
+    - data\processed\transformed_test.csv
+    - models\preprocessor.joblib
