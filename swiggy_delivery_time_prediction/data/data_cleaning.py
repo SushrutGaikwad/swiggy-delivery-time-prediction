@@ -535,16 +535,16 @@ if __name__ == "__main__":
     cleaned_dir_path.mkdir(exist_ok=True, parents=True)
 
     # Cleaned data file name
-    cleaned_data_filename = "swiggy_cleaned.csv"
+    cleaned_data_file_name = "swiggy_cleaned.csv"
 
     # Path of the cleaned data file
-    cleaned_data_path = cleaned_dir_path / cleaned_data_filename
+    cleaned_data_path = cleaned_dir_path / cleaned_data_file_name
 
     # Raw data file name
-    raw_data_filename = "swiggy.csv"
+    raw_data_file_name = "swiggy.csv"
 
     # Raw data path
-    raw_data_path = root_path / "data" / "raw" / raw_data_filename
+    raw_data_path = root_path / "data" / "raw" / raw_data_file_name
 
     # Cleaning and saving the raw data
     data_cleaner = DataCleaner()
