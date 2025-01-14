@@ -6,3 +6,15 @@ stages:
     - swiggy_delivery_time_prediction\data\data_cleaning.py
     outs:
     - data\cleaned\swiggy_cleaned.csv
+
+  training_test_split:
+    cmd: python swiggy_delivery_time_prediction\data\training_test_split.py
+    params:
+    - Train_Test_Split.test_size
+    - Train_Test_Split.random_state
+    deps:
+    - data\cleaned\swiggy_cleaned.csv
+    - swiggy_delivery_time_prediction\data\training_test_split.py
+    outs:
+    - data\interim\train.csv
+    - data\interim\test.csv

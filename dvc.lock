@@ -9,10 +9,34 @@ stages:
       size: 7772212
     - path: swiggy_delivery_time_prediction\data\data_cleaning.py
       hash: md5
-      md5: 37571c80c186508f98527b3997b03891
-      size: 19577
+      md5: 48849182263016e5cfbd7f7fd4f55ca0
+      size: 19705
     outs:
     - path: data\cleaned\swiggy_cleaned.csv
       hash: md5
       md5: 8304a5741f050725d706378df2cf7126
       size: 4498707
+  training_test_split:
+    cmd: python swiggy_delivery_time_prediction\data\training_test_split.py
+    deps:
+    - path: data\cleaned\swiggy_cleaned.csv
+      hash: md5
+      md5: 8304a5741f050725d706378df2cf7126
+      size: 4498707
+    - path: swiggy_delivery_time_prediction\data\training_test_split.py
+      hash: md5
+      md5: 38f538cd100c8a64e104be0800806913
+      size: 6125
+    params:
+      params.yaml:
+        Train_Test_Split.random_state: 42
+        Train_Test_Split.test_size: 0.2
+    outs:
+    - path: data\interim\test.csv
+      hash: md5
+      md5: 8ea50f9dc799652f455d90e191172b00
+      size: 899130
+    - path: data\interim\train.csv
+      hash: md5
+      md5: 778c8d506164a746a637da2991a5d577
+      size: 3596629
