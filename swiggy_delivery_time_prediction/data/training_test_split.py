@@ -27,7 +27,7 @@ handler.setFormatter(formatter)
 
 
 class TrainingTestSplitter:
-    def __init__(self):
+    def __init__(self) -> None:
         """Initializes a `TrainingTestSplitter` object."""
         self.logger = logging.getLogger("training_test_split")
         self.logger.info("Instantiating a `TrainingTestSplitter` object...")
