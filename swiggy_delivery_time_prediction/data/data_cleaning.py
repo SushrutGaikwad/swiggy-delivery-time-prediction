@@ -72,12 +72,12 @@ class DataCleaner:
             object_type_cols = df.select_dtypes(include=["object"]).columns
             for col in object_type_cols:
                 df[col] = df[col].str.strip()
+
+            self.logger.info("Execution of `remove_trailing_spaces` complete.")
+            return df
         except Exception as e:
             self.logger.error(f"[remove_trailing_spaces] Error: {e}")
             raise
-
-        self.logger.info("Execution of `remove_trailing_spaces` complete.")
-        return df
 
     def lowercase_strings(self, df: pd.DataFrame) -> pd.DataFrame:
         """Converts all the entries of the data in the object-type columns to lowercase.
@@ -95,12 +95,12 @@ class DataCleaner:
             for col in object_type_cols:
                 if col != "Delivery_person_ID":
                     df[col] = df[col].str.lower()
+
+            self.logger.info("Execution of `lowercase_strings` complete.")
+            return df
         except Exception as e:
             self.logger.error(f"[lowercase_strings] Error: {e}")
             raise
-
-        self.logger.info("Execution of `lowercase_strings` complete.")
-        return df
 
     def replace_string_nans(self, df: pd.DataFrame) -> pd.DataFrame:
         """Replaces all the entries of the data in the object-type columns containing the string "nan" to `np.nan`.
@@ -118,12 +118,12 @@ class DataCleaner:
             df[object_type_cols] = df[object_type_cols].map(
                 lambda x: np.nan if isinstance(x, str) and "nan" in x else x
             )
+
+            self.logger.info("Execution of `replace_string_nans` complete.")
+            return df
         except Exception as e:
             self.logger.error(f"[replace_string_nans] Error: {e}")
             raise
-
-        self.logger.info("Execution of `replace_string_nans` complete.")
-        return df
 
     def rename_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """Renames all the columns of the data.
@@ -138,12 +138,12 @@ class DataCleaner:
             self.logger.info("Executing `rename_columns`...")
 
             df = df.rename(str.lower, axis=1).rename(self.rename_mapping, axis=1)
+
+            self.logger.info("Execution of `rename_columns` complete.")
+            return df
         except Exception as e:
             self.logger.error(f"[rename_columns] Error: {e}")
             raise
-
-        self.logger.info("Execution of `rename_columns` complete.")
-        return df
 
     def drop_id_column(self, df: pd.DataFrame) -> pd.DataFrame:
         """Drops the 'id' column from the data.
@@ -158,15 +158,15 @@ class DataCleaner:
             self.logger.info("Executing `drop_id_column`...")
 
             df.drop(columns=["id"], inplace=True)
+
+            self.logger.info("Execution of `drop_id_column` complete.")
+            return df
         except KeyError:
             self.logger.error("[drop_id_column] Column 'id' not found.")
             raise
         except Exception as e:
             self.logger.error(f"[drop_id_column] Error dropping 'id': {e}")
             raise
-
-        self.logger.info("Execution of `drop_id_column` complete.")
-        return df
 
     def drop_minors(self, df: pd.DataFrame) -> pd.DataFrame:
         """Drops data of all the minors (i.e., people with age < 18).
@@ -183,6 +183,9 @@ class DataCleaner:
             df["age"] = df["age"].astype(float)
             minors_idxs = df.loc[df["age"] < 18].index
             df.drop(minors_idxs, inplace=True)
+
+            self.logger.info("Execution of `drop_minors` complete.")
+            return df
         except KeyError:
             self.logger.error("[drop_minors] Column 'age' not found.")
             raise
@@ -192,9 +195,6 @@ class DataCleaner:
         except Exception as e:
             self.logger.error(f"[drop_minors] Error dropping minors: {e}")
             raise
-
-        self.logger.info("Execution of `drop_minors` complete.")
-        return df
 
     def drop_six_star_ratings(self, df: pd.DataFrame) -> pd.DataFrame:
         """Drops the data with 6-star ratings.
@@ -211,6 +211,9 @@ class DataCleaner:
             df["ratings"] = df["ratings"].astype(float)
             six_star_ratings_idxs = df.loc[df["ratings"] == 6].index
             df.drop(six_star_ratings_idxs, inplace=True)
+
+            self.logger.info("Execution of `drop_six_star_ratings` complete.")
+            return df
         except KeyError:
             self.logger.error("[drop_six_star_ratings] Column 'ratings' not found.")
             raise
@@ -222,9 +225,6 @@ class DataCleaner:
         except Exception as e:
             self.logger.error(f"[drop_six_star_ratings] Error dropping 6-star ratings: {e}")
             raise
-
-        self.logger.info("Execution of `drop_six_star_ratings` complete.")
-        return df
 
     def create_city_name(self, df: pd.DataFrame) -> pd.DataFrame:
         """Creates the column 'city_name' using the column 'rider_id'.
@@ -239,6 +239,9 @@ class DataCleaner:
             self.logger.info("Executing `create_city_name`...")
 
             df["city_name"] = df["rider_id"].str.split("RES").str.get(0)
+
+            self.logger.info("Execution of `create_city_name` complete.")
+            return df
         except KeyError:
             self.logger.error(
                 "[create_city_name] Column 'rider_id' not found; cannot create 'city_name'."
@@ -247,9 +250,6 @@ class DataCleaner:
         except Exception as e:
             self.logger.error(f"[create_city_name] Error creating 'city_name': {e}")
             raise
-
-        self.logger.info("Execution of `create_city_name` complete.")
-        return df
 
     def clean_location_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """Cleans the location columns.
@@ -266,15 +266,15 @@ class DataCleaner:
             location_columns = df.columns[3:7]
             df[location_columns] = df[location_columns].abs()
             df[location_columns] = df[location_columns].map(lambda x: x if x >= 1 else np.nan)
+
+            self.logger.info("Execution of `clean_location_columns` complete.")
+            return df
         except IndexError as ie:
             self.logger.error(f"[clean_location_columns] location_columns indexing error: {ie}")
             raise
         except Exception as e:
             self.logger.error(f"[clean_location_columns] Error cleaning location columns: {e}")
             raise
-
-        self.logger.info("Execution of `clean_location_columns` complete.")
-        return df
 
     def compute_distance(self, df: pd.DataFrame) -> pd.DataFrame:
         """Computes the haversine distance using the location columns and saves it in a new column called 'distance'.
@@ -303,6 +303,9 @@ class DataCleaner:
             distance = 6371 * c
 
             df["distance"] = distance
+
+            self.logger.info("Execution of `compute_distance` complete.")
+            return df
         except KeyError:
             self.logger.error(
                 "[compute_distance] Some location columns not found; cannot compute distance."
@@ -311,9 +314,6 @@ class DataCleaner:
         except Exception as e:
             self.logger.error(f"[compute_distance] Error computing distance: {e}")
             raise
-
-        self.logger.info("Execution of `compute_distance` complete.")
-        return df
 
     def bin_distance(self, df: pd.DataFrame) -> pd.DataFrame:
         """Creates a new column 'distance_type', which is a binned version of the column 'distance'.
@@ -330,15 +330,15 @@ class DataCleaner:
             bins = [0, 5, 10, 15, np.inf]
             labels = ["short", "medium", "long", "very_long"]
             df["distance_type"] = pd.cut(df["distance"], bins=bins, right=False, labels=labels)
+
+            self.logger.info("Execution of `bin_distance` complete.")
+            return df
         except KeyError:
             self.logger.error("[bin_distance] Column 'distance' not found.")
             raise
         except Exception as e:
             self.logger.error(f"[bin_distance] Error binning distance: {e}")
             raise
-
-        self.logger.info("Execution of `bin_distance` complete.")
-        return df
 
     def clean_datetime_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """Cleans and creates new date time columns.
@@ -384,15 +384,15 @@ class DataCleaner:
             df["order_time_of_day"] = time_of_day_info.where(df["order_time"].notna(), np.nan)
 
             df.drop(columns=["order_time", "order_picked_time"], inplace=True)
+
+            self.logger.info("Execution of `clean_datetime_columns` complete.")
+            return df
         except KeyError as ke:
             self.logger.error(f"[clean_datetime_columns] Missing datetime columns: {ke}")
             raise
         except Exception as e:
             self.logger.error(f"[clean_datetime_columns] Error cleaning datetime columns: {e}")
             raise
-
-        self.logger.info("Execution of `clean_datetime_columns` complete.")
-        return df
 
     def clean_weather_column(self, df: pd.DataFrame) -> pd.DataFrame:
         """Cleans the column 'weather'.
@@ -407,15 +407,15 @@ class DataCleaner:
             self.logger.info("Executing `clean_weather_column`...")
 
             df["weather"] = df["weather"].str.replace("conditions ", "")
+
+            self.logger.info("Execution of `clean_weather_column` complete.")
+            return df
         except KeyError:
             self.logger.error("[clean_weather_column] Column 'weather' not found.")
             raise
         except Exception as e:
             self.logger.error(f"[clean_weather_column] Error cleaning 'weather': {e}")
             raise
-
-        self.logger.info("Execution of `clean_weather_column` complete.")
-        return df
 
     def convert_multiple_deliveries(self, df: pd.DataFrame) -> pd.DataFrame:
         """Converts the column 'multiple_deliveries' to `float`.
@@ -430,6 +430,9 @@ class DataCleaner:
             self.logger.info("Executing `convert_multiple_deliveries`...")
 
             df["multiple_deliveries"] = df["multiple_deliveries"].astype(float)
+
+            self.logger.info("Execution of `convert_multiple_deliveries` complete.")
+            return df
         except KeyError:
             self.logger.error("[convert_multiple_deliveries] 'multiple_deliveries' not found.")
             raise
@@ -439,9 +442,6 @@ class DataCleaner:
         except Exception as e:
             self.logger.error(f"[convert_multiple_deliveries] Error: {e}")
             raise
-
-        self.logger.info("Execution of `convert_multiple_deliveries` complete.")
-        return df
 
     def clean_time_taken_column(self, df: pd.DataFrame) -> pd.DataFrame:
         """Cleans the column 'time_taken'.
@@ -456,6 +456,9 @@ class DataCleaner:
             self.logger.info("Executing `clean_time_taken_column`...")
 
             df["time_taken"] = df["time_taken"].str.replace("(min) ", "").astype(int)
+
+            self.logger.info("Execution of `clean_time_taken_column` complete.")
+            return df
         except KeyError:
             self.logger.error("[clean_time_taken_column] Column 'time_taken' not found.")
             raise
@@ -465,9 +468,6 @@ class DataCleaner:
         except Exception as e:
             self.logger.error(f"[clean_time_taken_column] Error: {e}")
             raise
-
-        self.logger.info("Execution of `clean_time_taken_column` complete.")
-        return df
 
     def drop_unnecessary_columns(self, df: pd.DataFrame) -> pd.DataFrame:
         """Drops unnecessary columns from the data.
@@ -482,12 +482,12 @@ class DataCleaner:
             self.logger.info("Executing `drop_unnecessary_columns`...")
 
             df.drop(columns=self.cols_to_drop, inplace=True, errors="ignore")
+
+            self.logger.info("Execution of `drop_unnecessary_columns` complete.")
+            return df
         except Exception as e:
             self.logger.error(f"[drop_final_columns] Error dropping columns: {e}")
             raise
-
-        self.logger.info("Execution of `drop_unnecessary_columns` complete.")
-        return df
 
     def clean_and_save_data(self, raw_data_path: Path, cleaned_data_path: Path) -> None:
         """Cleans and saves the data.
