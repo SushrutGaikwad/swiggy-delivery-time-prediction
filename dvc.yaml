@@ -29,3 +29,16 @@ stages:
     - data\processed\transformed_train.csv
     - data\processed\transformed_test.csv
     - models\preprocessor.joblib
+  
+  model_training:
+    cmd: python swiggy_delivery_time_prediction\models\model_training.py
+    deps:
+    - swiggy_delivery_time_prediction\models\model_training.py
+    - data\processed\transformed_train.csv
+    params:
+    - Model_Training.Random_Forest
+    - Model_Training.LightGBM
+    outs:
+    - models\model.joblib
+    - models\stacking_regressor.joblib
+    - models\power_transformer.joblib

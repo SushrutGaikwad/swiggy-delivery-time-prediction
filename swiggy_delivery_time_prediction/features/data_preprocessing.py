@@ -94,6 +94,9 @@ class DataPreprocessor:
 
             self.logger.info("Execution of `load_data` complete.")
             return df
+        except FileNotFoundError:
+            self.logger.error(f"[load_data] The file {data_path} does not exist.")
+            raise
         except Exception as e:
             self.logger.error(f"[load_data] Error reading data at {data_path}: {e}")
             raise
@@ -117,9 +120,7 @@ class DataPreprocessor:
             self.logger.error(f"[drop_missing_values] Error: {e}")
             raise
 
-    def split_X_and_y(
-        self, df: pd.DataFrame, target_col: str
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    def split_X_and_y(self, df: pd.DataFrame, target_col: str) -> Tuple[pd.DataFrame, pd.Series]:
         """Splits the data into features (X) and target (y).
 
         Args:
@@ -127,7 +128,7 @@ class DataPreprocessor:
             target_col (str): Target name.
 
         Returns:
-            Tuple[pd.DataFrame, pd.DataFrame]: (X, y)
+            Tuple[pd.DataFrame, pd.Series]: (X, y)
         """
         try:
             self.logger.info("Executing `split_X_and_y`...")
@@ -295,8 +296,8 @@ class DataPreprocessor:
         self.logger.info("Executing `preprocess_data`...")
 
         # Loading the training and test data
-        train_df = self.load_data(path=train_file_path)
-        test_df = self.load_data(path=test_file_path)
+        train_df = self.load_data(data_path=train_file_path)
+        test_df = self.load_data(data_path=test_file_path)
 
         # Dropping the missing values
         train_df = self.drop_missing_values(df=train_df)

@@ -1,3 +1,26 @@
 Train_Test_Split:
   test_size: 0.2
   random_state: 42
+
+Model_Training:
+  Random_Forest:
+    n_estimators: 158
+    criterion: 'squared_error'
+    max_depth: 19
+    min_samples_split: 8
+    min_samples_leaf: 6
+    max_samples: 0.6205450829340415
+    verbose: 1
+    n_jobs: -1
+    random_state: 42
+  
+  LightGBM:
+    n_estimators: 126
+    max_depth: 28
+    learning_rate: 0.2946865337767194
+    subsample: 0.7920223399110035
+    min_child_weight: 9
+    min_split_gain: 0.013257122215308698
+    reg_lambda: 31.754833031163244
+    n_jobs: -1
+    random_state: 42

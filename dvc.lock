@@ -53,8 +53,8 @@ stages:
       size: 3596629
     - path: swiggy_delivery_time_prediction\features\data_preprocessing.py
       hash: md5
-      md5: 165419d1345dd9568b3a3d052671ad2e
-      size: 13001
+      md5: 7d25fa5ccd0efe134b7b718575ae3b66
+      size: 13142
     outs:
     - path: data\processed\transformed_test.csv
       hash: md5
@@ -66,5 +66,51 @@ stages:
       size: 4494165
     - path: models\preprocessor.joblib
       hash: md5
-      md5: 04b4f0672bc861e89fc665143bea9fb8
-      size: 8314
+      md5: 457c9570f22729067ee5421205eb4777
+      size: 8337
+  model_training:
+    cmd: python swiggy_delivery_time_prediction\models\model_training.py
+    deps:
+    - path: data\processed\transformed_train.csv
+      hash: md5
+      md5: ae055171b87a9e0840edb32769617a88
+      size: 4494165
+    - path: swiggy_delivery_time_prediction\models\model_training.py
+      hash: md5
+      md5: cfcaf75a34515639be1fc6cbbd5065be
+      size: 9243
+    params:
+      params.yaml:
+        Model_Training.LightGBM:
+          n_estimators: 126
+          max_depth: 28
+          learning_rate: 0.2946865337767194
+          subsample: 0.7920223399110035
+          min_child_weight: 9
+          min_split_gain: 0.013257122215308698
+          reg_lambda: 31.754833031163244
+          n_jobs: -1
+          random_state: 42
+        Model_Training.Random_Forest:
+          n_estimators: 158
+          criterion: squared_error
+          max_depth: 19
+          min_samples_split: 8
+          min_samples_leaf: 6
+          max_samples: 0.6205450829340415
+          verbose: 1
+          n_jobs: -1
+          random_state: 42
+    outs:
+    - path: models\model.joblib
+      hash: md5
+      md5: a218fdeb9e99ba646ecc7b0d98950e19
+      size: 42080552
+    - path: models\power_transformer.joblib
+      hash: md5
+      md5: 18f6616b72bcbd4178fd1b785ce582c8
+      size: 837
+    - path: models\stacking_regressor.joblib
+      hash: md5
+      md5: 8a4ddd7504555bcbf1f4978c7ea7be1b
+      size: 42073898
