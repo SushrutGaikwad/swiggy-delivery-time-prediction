@@ -42,3 +42,13 @@ stages:
     - models\model.joblib
     - models\stacking_regressor.joblib
     - models\power_transformer.joblib
+  
+  model_evaluation:
+    cmd: python swiggy_delivery_time_prediction\models\model_evaluation.py
+    deps:
+    - swiggy_delivery_time_prediction\models\model_evaluation.py
+    - data\processed\transformed_train.csv
+    - data\processed\transformed_test.csv
+    - models\model.joblib
+    outs:
+    - run_info.json
