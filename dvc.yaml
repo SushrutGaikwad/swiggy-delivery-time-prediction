@@ -52,3 +52,9 @@ stages:
     - models\model.joblib
     outs:
     - run_info.json
+  
+  model_registration:
+    cmd: python swiggy_delivery_time_prediction\models\model_registration.py
+    deps:
+    - swiggy_delivery_time_prediction\models\model_registration.py
+    - run_info.json
