@@ -244,7 +244,8 @@ class ModelEvaluator:
         transformed_train_file_path: Path,
         transformed_test_file_path: Path,
         trained_model_file_path: Path,
-        json_run_info_file_path: Path,
+        run_info_file_path: Path,
+        artifacts_dir_path: Path = None,
     ) -> None:
         self.logger.info("Executing `evaluate_trained_model`...")
 
@@ -324,17 +325,40 @@ class ModelEvaluator:
                 signature=model_signature,
             )
 
+            # Logging additional artifacts like the stacking regressor, power
+            # transformer, and preprocessor
+            if artifacts_dir_path is not None and artifacts_dir_path.exists():
+                self.logger.info(f"Logging additional artifacts from {artifacts_dir_path}...")
+                stacking_regressor_file_path = artifacts_dir_path / "stacking_regressor.joblib"
+                power_transformer_file_path = artifacts_dir_path / "power_transformer.joblib"
+                preprocessor_file_path = artifacts_dir_path / "preprocessor.joblib"
+
+                if stacking_regressor_file_path.exists():
+                    mlflow.log_artifact(stacking_regressor_file_path)
+                    self.logger.info("'stacking_regressor.joblib' logged.")
+
+                if power_transformer_file_path.exists():
+                    mlflow.log_artifact(power_transformer_file_path)
+                    self.logger.info("'power_transformer.joblib' logged.")
+
+                if preprocessor_file_path.exists():
+                    mlflow.log_artifact(preprocessor_file_path)
+                    self.logger.info("'preprocessor.joblib' logged.")
+
             artifact_uri = mlflow.get_artifact_uri()
+            self.logger.info("MLflow logging complete; model & artifacts logged.")
 
         run_id = run.info.run_id
         model_name = "swiggy_delivery_time_prediction_model"
 
         self.log_trained_model_info(
-            json_file_path=json_run_info_file_path,
+            json_file_path=run_info_file_path,
             run_id=run_id,
             artifact_uri=artifact_uri,
             trained_model_name=model_name,
         )
+
+        self.logger.info("Execution of `evaluate_trained_model` complete.")
 
 
 if __name__ == "__main__":
@@ -350,7 +374,11 @@ if __name__ == "__main__":
     trained_model_file_path = root_path / "models" / "model.joblib"
 
     # JSON file path
-    json_run_info_file_path = root_path / "run_info.json"
+    run_info_file_path = root_path / "run_info.json"
+
+    # Path of the directory containing the artifacts like stacking_regressor, power_transformer,
+    # preprocessor, etc.
+    artifacts_dir_path = root_path / "models"
 
     # Initiate model evaluation
     evaluator = ModelEvaluator(target_col="time_taken")
@@ -358,5 +386,6 @@ if __name__ == "__main__":
         transformed_train_file_path=transformed_train_file_path,
         transformed_test_file_path=transformed_test_file_path,
         trained_model_file_path=trained_model_file_path,
-        json_run_info_file_path=json_run_info_file_path,
+        run_info_file_path=run_info_file_path,
+        artifacts_dir_path=artifacts_dir_path,
     )
