@@ -489,17 +489,18 @@ class DataCleaner:
             self.logger.error(f"[drop_final_columns] Error dropping columns: {e}")
             raise
 
-    def clean_and_save_data(self, raw_data_path: Path, cleaned_data_path: Path) -> None:
-        """Cleans and saves the data.
+    def clean_data(self, raw_df: pd.DataFrame) -> pd.DataFrame:
+        """Cleans the raw data.
 
         Args:
-            raw_data_path (Path): Path of the raw uncleaned data.
-            cleaned_data_path (Path): Path of the cleaned data.
-        """
-        self.logger.info("Executing `clean_and_save_data`...")
+            raw_df (pd.DataFrame): Raw data.
 
-        df = pd.read_csv(raw_data_path)
-        df = df.copy()
+        Returns:
+            pd.DataFrame: Cleaned data.
+        """
+        self.logger.info("Executing `clean_data`...")
+
+        df = raw_df.copy()
 
         df = self.remove_trailing_spaces(df)
         df = self.lowercase_strings(df)
@@ -518,9 +519,8 @@ class DataCleaner:
         df = self.clean_time_taken_column(df)
         df = self.drop_unnecessary_columns(df)
 
-        df.to_csv(cleaned_data_path, index=False)
-
-        self.logger.info("Execution of `clean_and_save_data` complete.")
+        self.logger.info("Execution of `clean_data` complete.")
+        return df
 
 
 if __name__ == "__main__":
@@ -538,16 +538,18 @@ if __name__ == "__main__":
     cleaned_data_file_name = "swiggy_cleaned.csv"
 
     # Path of the cleaned data file
-    cleaned_data_path = cleaned_dir_path / cleaned_data_file_name
+    cleaned_data_file_path = cleaned_dir_path / cleaned_data_file_name
 
     # Raw data file name
     raw_data_file_name = "swiggy.csv"
 
     # Raw data path
-    raw_data_path = root_path / "data" / "raw" / raw_data_file_name
+    raw_data_file_path = root_path / "data" / "raw" / raw_data_file_name
 
-    # Cleaning and saving the raw data
+    # Reading the raw data
+    raw_df = pd.read_csv(raw_data_file_path)
+
+    # Cleaning the raw data and saving the cleaned data
     data_cleaner = DataCleaner()
-    data_cleaner.clean_and_save_data(
-        raw_data_path=raw_data_path, cleaned_data_path=cleaned_data_path
-    )
+    clean_df = data_cleaner.clean_data(raw_df=raw_df)
+    clean_df.to_csv(cleaned_data_file_path, index=False)
