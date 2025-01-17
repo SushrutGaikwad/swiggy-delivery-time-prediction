@@ -25,23 +25,38 @@ handler.setFormatter(formatter)
 
 
 class DataCleaner:
-    def __init__(self) -> None:
+    def __init__(self, modify_target: bool = True) -> None:
         """Initializes a `DataCleaner` object."""
         self.logger = logging.getLogger("data_cleaning")
         self.logger.info("Instantiating a `DataCleaner` object...")
-        self.rename_mapping = {
-            "delivery_person_id": "rider_id",
-            "delivery_person_age": "age",
-            "delivery_person_ratings": "ratings",
-            "delivery_location_latitude": "delivery_latitude",
-            "delivery_location_longitude": "delivery_longitude",
-            "time_orderd": "order_time",
-            "time_order_picked": "order_picked_time",
-            "weatherconditions": "weather",
-            "road_traffic_density": "traffic",
-            "city": "city_type",
-            "time_taken(min)": "time_taken",
-        }
+        self.modify_target = modify_target
+        if self.modify_target:
+            self.rename_mapping = {
+                "delivery_person_id": "rider_id",
+                "delivery_person_age": "age",
+                "delivery_person_ratings": "ratings",
+                "delivery_location_latitude": "delivery_latitude",
+                "delivery_location_longitude": "delivery_longitude",
+                "time_orderd": "order_time",
+                "time_order_picked": "order_picked_time",
+                "weatherconditions": "weather",
+                "road_traffic_density": "traffic",
+                "city": "city_type",
+                "time_taken(min)": "time_taken",
+            }
+        else:
+            self.rename_mapping = {
+                "delivery_person_id": "rider_id",
+                "delivery_person_age": "age",
+                "delivery_person_ratings": "ratings",
+                "delivery_location_latitude": "delivery_latitude",
+                "delivery_location_longitude": "delivery_longitude",
+                "time_orderd": "order_time",
+                "time_order_picked": "order_picked_time",
+                "weatherconditions": "weather",
+                "road_traffic_density": "traffic",
+                "city": "city_type",
+            }
         self.cols_to_drop = [
             "rider_id",
             "restaurant_latitude",
@@ -516,7 +531,8 @@ class DataCleaner:
         df = self.clean_datetime_columns(df)
         df = self.clean_weather_column(df)
         df = self.convert_multiple_deliveries(df)
-        df = self.clean_time_taken_column(df)
+        if self.modify_target:
+            df = self.clean_time_taken_column(df)
         df = self.drop_unnecessary_columns(df)
 
         self.logger.info("Execution of `clean_data` complete.")
@@ -550,6 +566,6 @@ if __name__ == "__main__":
     raw_df = pd.read_csv(raw_data_file_path)
 
     # Cleaning the raw data and saving the cleaned data
-    data_cleaner = DataCleaner()
+    data_cleaner = DataCleaner(modify_target=True)
     clean_df = data_cleaner.clean_data(raw_df=raw_df)
     clean_df.to_csv(cleaned_data_file_path, index=False)
