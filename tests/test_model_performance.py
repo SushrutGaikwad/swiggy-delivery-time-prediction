@@ -44,7 +44,7 @@ model = mlflow.sklearn.load_model(model_uri)
 # Root path
 root_path = Path(__file__).parent.parent
 print("Contents of root_path:")
-for item in root_path:
+for item in root_path.iterdir():
     print(item.name)
 
 # Load the preprocessor
