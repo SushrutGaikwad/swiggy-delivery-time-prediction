@@ -7,3 +7,5 @@ dvc
 dvc[s3]
 lightgbm
 joblib
+fastapi[standard]
+pytest
