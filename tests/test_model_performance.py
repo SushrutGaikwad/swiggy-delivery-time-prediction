@@ -42,7 +42,10 @@ model_uri = f"models:/{model_name}/{stage}"
 model = mlflow.sklearn.load_model(model_uri)
 
 # Root path
-root_path = Path(__file__).parent.parent.parent
+root_path = Path(__file__).parent.parent
+print("Contents of root_path:")
+for item in root_path:
+    print(item.name)
 
 # Load the preprocessor
 preprocessor_file_path = root_path / "models" / "preprocessor.joblib"
