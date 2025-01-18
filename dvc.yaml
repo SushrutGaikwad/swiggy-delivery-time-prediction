@@ -1,60 +1,60 @@
 stages:
   data_cleaning:
-    cmd: python swiggy_delivery_time_prediction\data\data_cleaning.py
+    cmd: python swiggy_delivery_time_prediction/data/data_cleaning.py
     deps:
-    - data\raw\swiggy.csv
-    - swiggy_delivery_time_prediction\data\data_cleaning.py
+    - data/raw/swiggy.csv
+    - swiggy_delivery_time_prediction/data/data_cleaning.py
     outs:
-    - data\cleaned\swiggy_cleaned.csv
+    - data/cleaned/swiggy_cleaned.csv
 
   training_test_split:
-    cmd: python swiggy_delivery_time_prediction\data\training_test_split.py
+    cmd: python swiggy_delivery_time_prediction/data/training_test_split.py
     params:
     - Train_Test_Split.test_size
     - Train_Test_Split.random_state
     deps:
-    - data\cleaned\swiggy_cleaned.csv
-    - swiggy_delivery_time_prediction\data\training_test_split.py
+    - data/cleaned/swiggy_cleaned.csv
+    - swiggy_delivery_time_prediction/data/training_test_split.py
     outs:
-    - data\interim\train.csv
-    - data\interim\test.csv
+    - data/interim/train.csv
+    - data/interim/test.csv
   
   data_preprocessing:
-    cmd: python swiggy_delivery_time_prediction\features\data_preprocessing.py
+    cmd: python swiggy_delivery_time_prediction/features/data_preprocessing.py
     deps:
-    - data\interim\train.csv
-    - data\interim\test.csv
-    - swiggy_delivery_time_prediction\features\data_preprocessing.py
+    - data/interim/train.csv
+    - data/interim/test.csv
+    - swiggy_delivery_time_prediction/features/data_preprocessing.py
     outs:
-    - data\processed\transformed_train.csv
-    - data\processed\transformed_test.csv
-    - models\preprocessor.joblib
+    - data/processed/transformed_train.csv
+    - data/processed/transformed_test.csv
+    - models/preprocessor.joblib
   
   model_training:
-    cmd: python swiggy_delivery_time_prediction\models\model_training.py
+    cmd: python swiggy_delivery_time_prediction/models/model_training.py
     deps:
-    - swiggy_delivery_time_prediction\models\model_training.py
-    - data\processed\transformed_train.csv
+    - swiggy_delivery_time_prediction/models/model_training.py
+    - data/processed/transformed_train.csv
     params:
     - Model_Training.Random_Forest
     - Model_Training.LightGBM
     outs:
-    - models\model.joblib
-    - models\stacking_regressor.joblib
-    - models\power_transformer.joblib
+    - models/model.joblib
+    - models/stacking_regressor.joblib
+    - models/power_transformer.joblib
   
   model_evaluation:
-    cmd: python swiggy_delivery_time_prediction\models\model_evaluation.py
+    cmd: python swiggy_delivery_time_prediction/models/model_evaluation.py
     deps:
-    - swiggy_delivery_time_prediction\models\model_evaluation.py
-    - data\processed\transformed_train.csv
-    - data\processed\transformed_test.csv
-    - models\model.joblib
+    - swiggy_delivery_time_prediction/models/model_evaluation.py
+    - data/processed/transformed_train.csv
+    - data/processed/transformed_test.csv
+    - models/model.joblib
     outs:
     - run_info.json
   
   model_registration:
-    cmd: python swiggy_delivery_time_prediction\models\model_registration.py
+    cmd: python swiggy_delivery_time_prediction/models/model_registration.py
     deps:
-    - swiggy_delivery_time_prediction\models\model_registration.py
+    - swiggy_delivery_time_prediction/models/model_registration.py
     - run_info.json
