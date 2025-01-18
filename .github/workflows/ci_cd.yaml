@@ -31,12 +31,6 @@ jobs:
         run: |
           dvc pull
       
-      - name: Debug DVC Remote
-        run: |
-          dvc remote list
-          dvc status
-          ls -R models
-      
       - name: Test model registration
         env:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
