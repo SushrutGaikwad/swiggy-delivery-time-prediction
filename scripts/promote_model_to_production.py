@@ -23,7 +23,7 @@ def load_run_info(run_info_file_path: Path):
     return run_info
 
 
-# Model name and stage
+# Model name and model stage
 model_name = load_run_info(Path("run_info.json"))["model_name"]
 stage = "Staging"
 
