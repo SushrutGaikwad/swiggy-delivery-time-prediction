@@ -31,8 +31,10 @@ jobs:
         run: |
           dvc pull
       
-      - name: Debug DVC-pulled files
+      - name: Debug DVC Remote
         run: |
+          dvc remote list
+          dvc status
           ls -R models
       
       - name: Test model registration
