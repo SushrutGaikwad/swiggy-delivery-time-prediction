@@ -210,7 +210,10 @@ class ModelService:
 
 
 # Initialize the service
-model_service = ModelService(run_info_file_path=Path("run_info.json"), stage="Staging")
+model_service = ModelService(
+    run_info_file_path=Path("run_info.json"),
+    # stage="Staging",
+)
 
 # FastAPI application
 app = FastAPI()
@@ -257,4 +260,9 @@ def do_predictions(data: Data) -> dict:
 
 # Run the server (local dev)
 if __name__ == "__main__":
-    uvicorn.run(app="app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(
+        app="app:app",
+        host="0.0.0.0",
+        port=8000,
+        # reload=True,
+    )
