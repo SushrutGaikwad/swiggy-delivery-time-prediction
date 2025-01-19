@@ -1,6 +1,6 @@
 Train_Test_Split:
-  test_size: 0.25
-  random_state: 42
+  test_size: 0.2
+  random_state: 271828
 
 Model_Training:
   Random_Forest:
