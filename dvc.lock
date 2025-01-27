@@ -29,28 +29,28 @@ stages:
       size: 6159
     params:
       params.yaml:
-        Train_Test_Split.random_state: 421
-        Train_Test_Split.test_size: 0.25
+        Train_Test_Split.random_state: 314
+        Train_Test_Split.test_size: 0.2
     outs:
     - path: data/interim/test.csv
       hash: md5
-      md5: 831ccc78ed43d5f940e443dd5d27be09
-      size: 1122673
+      md5: 7b1e39c77ee104ec8afb963508b72dba
+      size: 898662
     - path: data/interim/train.csv
       hash: md5
-      md5: f18da01fb19e660a708748e6a573e217
-      size: 3373086
+      md5: f251650a254a2c11faf8c58d72856770
+      size: 3597097
   data_preprocessing:
     cmd: python swiggy_delivery_time_prediction/features/data_preprocessing.py
     deps:
     - path: data/interim/test.csv
       hash: md5
-      md5: 831ccc78ed43d5f940e443dd5d27be09
-      size: 1122673
+      md5: 7b1e39c77ee104ec8afb963508b72dba
+      size: 898662
     - path: data/interim/train.csv
       hash: md5
-      md5: f18da01fb19e660a708748e6a573e217
-      size: 3373086
+      md5: f251650a254a2c11faf8c58d72856770
+      size: 3597097
     - path: swiggy_delivery_time_prediction/features/data_preprocessing.py
       hash: md5
       md5: 7d25fa5ccd0efe134b7b718575ae3b66
@@ -58,23 +58,23 @@ stages:
     outs:
     - path: data/processed/transformed_test.csv
       hash: md5
-      md5: 8c7acad8b3001fce8dda908f8ecf134d
-      size: 1402845
+      md5: b3737c5df72fbc6e888928fa5bef8be3
+      size: 1127178
     - path: data/processed/transformed_train.csv
       hash: md5
-      md5: 7e43545740d216e52f49047c0cdbd1d2
-      size: 4221109
+      md5: eba6d336b6faf77618b5ffe5683fdc7d
+      size: 4496776
     - path: models/preprocessor.joblib
       hash: md5
-      md5: a9068bb8d3ee446f78171394e1de4063
+      md5: 8c4fe5c2e4f9180fa0f20263ac9976ea
       size: 8337
   model_training:
     cmd: python swiggy_delivery_time_prediction/models/model_training.py
     deps:
     - path: data/processed/transformed_train.csv
       hash: md5
-      md5: 7e43545740d216e52f49047c0cdbd1d2
-      size: 4221109
+      md5: eba6d336b6faf77618b5ffe5683fdc7d
+      size: 4496776
     - path: swiggy_delivery_time_prediction/models/model_training.py
       hash: md5
       md5: cfcaf75a34515639be1fc6cbbd5065be
@@ -104,31 +104,31 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: 2717243bc211e38b47b3730c7e7097b8
-      size: 39467352
+      md5: 61c5e195b064b1fc45efd70f402068dd
+      size: 42020728
     - path: models/power_transformer.joblib
       hash: md5
-      md5: c37df8272dee223ccb9fd56be0aadd4d
+      md5: 441f62b6f067d413f6ac38e0c08bdea5
       size: 837
     - path: models/stacking_regressor.joblib
       hash: md5
-      md5: 9e131b304b38c55143753f731e7dd7cd
-      size: 39460698
+      md5: 2286bb9767e188b80397e5f60c6b8586
+      size: 42014074
   model_evaluation:
     cmd: python swiggy_delivery_time_prediction/models/model_evaluation.py
     deps:
     - path: data/processed/transformed_test.csv
       hash: md5
-      md5: 8c7acad8b3001fce8dda908f8ecf134d
-      size: 1402845
+      md5: b3737c5df72fbc6e888928fa5bef8be3
+      size: 1127178
     - path: data/processed/transformed_train.csv
       hash: md5
-      md5: 7e43545740d216e52f49047c0cdbd1d2
-      size: 4221109
+      md5: eba6d336b6faf77618b5ffe5683fdc7d
+      size: 4496776
     - path: models/model.joblib
       hash: md5
-      md5: 2717243bc211e38b47b3730c7e7097b8
-      size: 39467352
+      md5: 61c5e195b064b1fc45efd70f402068dd
+      size: 42020728
     - path: swiggy_delivery_time_prediction/models/model_evaluation.py
       hash: md5
       md5: b5e17318d1c4b403cab7c3646877a279
@@ -136,14 +136,14 @@ stages:
     outs:
     - path: run_info.json
       hash: md5
-      md5: 2330d392d9eddfa2e5066ee81d5bf775
+      md5: 5ff93f2ef382c492d66a8ce9c9337c1e
       size: 233
   model_registration:
     cmd: python swiggy_delivery_time_prediction/models/model_registration.py
     deps:
     - path: run_info.json
       hash: md5
-      md5: 2330d392d9eddfa2e5066ee81d5bf775
+      md5: 5ff93f2ef382c492d66a8ce9c9337c1e
       size: 233
     - path: swiggy_delivery_time_prediction/models/model_registration.py
       hash: md5
